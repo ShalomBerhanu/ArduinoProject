@@ -1,76 +1,43 @@
-/* Reset & basics */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+// Hardcoded admin login
+const adminAccounts = {
+  admin: "1234"
+};
+
+// Login Function
+function login() {
+  const user = document.getElementById("adminUser").value;
+  const pass = document.getElementById("adminPass").value;
+
+  if (adminAccounts[user] === pass) {
+    document.getElementById("adminSection").style.display = "block";
+    document.getElementById("loginMessage").innerText = "Access granted.";
+  } else {
+    document.getElementById("loginMessage").innerText = "Invalid credentials!";
+  }
 }
 
-body {
-  font-family: 'Poppins', sans-serif;
-  background: #f4f6f9;
-  color: #333;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  height: 100vh;
-  padding: 40px 20px;
+// Check Waste Status Function
+function checkStatus() {
+  const code = document.getElementById("studentPasscode").value;
+  const result = document.getElementById("result");
+
+  db.ref('wasteFrequency/' + code).once('value', snapshot => {
+    if (snapshot.exists()) {
+      result.innerText = `Student ${code} wasted food ${snapshot.val()} time(s).`;
+    } else {
+      result.innerText = "Student not found.";
+    }
+  });
 }
 
-h2 {
-  font-size: 28px;
-  color: #2c3e50;
-  margin-bottom: 30px;
+// Load Top 3 Students (for both pages)
+if (document.getElementById("topStudents")) {
+  db.ref('wasteFrequency').orderByValue().limitToFirst(3).once('value', snapshot => {
+    let output = "<h3>Top 3 Responsible Students 🌿</h3><ul>";
+    snapshot.forEach(child => {
+      output += `<li>${child.key}: ${child.val()} waste(s)</li>`;
+    });
+    output += "</ul>";
+    document.getElementById("topStudents").innerHTML = output;
+  });
 }
-
-input[type="text"] {
-  padding: 12px 16px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 250px;
-  outline: none;
-  transition: all 0.3s ease;
-  margin-right: 10px;
-}
-
-input[type="text"]:focus {
-  border-color: #3498db;
-  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
-}
-
-button {
-  padding: 12px 20px;
-  font-size: 16px;
-  color: #fff;
-  background: #3498db;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-button:hover {
-  background: #2980b9;
-}
-
-#result {
-  margin-top: 30px;
-  font-size: 20px;
-  padding: 10px 15px;
-  border-radius: 5px;
-  min-height: 40px;
-  background: #ecf0f1;
-  border: 1px solid #ccc;
-  width: 300px;
-  text-align: center;
-  color: #2c3e50;
-}
-
-footer {
-  margin-top: auto;
-  font-size: 14px;
-  color: #888;
-  text-align: center;
-}
-
