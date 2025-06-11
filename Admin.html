@@ -1,1 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SmartWaste Admin</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="firebase.js"></script>
+</head>
+<body>
+  <h2>Admin Login</h2>
+  <input type="text" id="adminUser" placeholder="Admin Username">
+  <input type="password" id="adminPass" placeholder="Password">
+  <button onclick="login()">Login</button>
+  <div id="loginMessage"></div>
 
+  <div id="adminSection" style="display:none;">
+    <h2>Check Student Status</h2>
+    <input type="text" id="studentPasscode" placeholder="Enter Student Passcode">
+    <button onclick="checkStatus()">Check Waste Status</button>
+    <div id="result"></div>
+  </div>
+
+  <footer>SmartWaste &copy; 2025</footer>
+  <script src="script.js"></script>
+</body>
+</html>
